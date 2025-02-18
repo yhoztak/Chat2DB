@@ -31,8 +31,16 @@ public class MongodbManage extends DefaultDBManage implements DBManage {
 
     @Override
     public void dropTable(Connection connection, String databaseName, String schemaName, String tableName) {
-        String sql = " db. " + tableName + ".drop();";
-        SQLExecutor.getInstance().execute(connection, sql, resultSet -> null);
+        if (StringUtils.isEmpty(tableName)) {
+            throw new IllegalArgumentException("Table name cannot be empty");
+        }
+        try {
+            MongoDatabase database = connection.getDatabase(databaseName);
+            MongoCollection<Document> collection = database.getCollection(tableName);
+            collection.drop();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to drop table: " + e.getMessage(), e);
+        }
     }
 
 }
