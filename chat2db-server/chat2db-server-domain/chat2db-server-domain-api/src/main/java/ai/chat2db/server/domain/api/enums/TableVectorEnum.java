@@ -32,6 +32,9 @@ public enum TableVectorEnum implements BaseEnum<String> {
      * @param name
      * @return
      */
+    if (name == null || name.isEmpty()) {
+        return null;
+    }
     public static TableVectorEnum getByName(String name) {
         for (TableVectorEnum dbTypeEnum : TableVectorEnum.values()) {
             if (dbTypeEnum.name().equals(name)) {
